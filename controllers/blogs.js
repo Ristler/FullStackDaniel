@@ -31,8 +31,10 @@ blogsRouter.get('/:id', async (request, response, next) => {
   }
 })
   
-
+//FIXAA TÄMÄ, ETTÄ APP EI CRASH JOS KENTÄT ON TYHJÄT.
 blogsRouter.post('/', async (request, response) => {
+ 
+
   const { title, author, url, likes} = request.body
 
   const token = getTokenFrom(request)
@@ -41,6 +43,7 @@ blogsRouter.post('/', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
   const user = await User.findById(decodedToken.id)
+  try {
 
   const blog = new Blog({
     title,
@@ -55,7 +58,10 @@ blogsRouter.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedBlog)
-})
+}catch (err) {
+  console.log("error.")
+  response.status(400)
+}})
 
 //TOIMII.
 blogsRouter.delete('/:id', async (request, response) => {
