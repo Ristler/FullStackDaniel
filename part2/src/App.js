@@ -5,16 +5,14 @@ import personService from './services/persons'
 
 
 const Notification = ({ message }) => {
-  if (message === 'nan') {
-    return null
-  }
-
+  if (message) {
+    
   return (
     <div className="success">
       {message}
     </div>
   )
-}
+}}
 
 
 const PersonForm = (props) => {
@@ -53,7 +51,7 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [successMessage, setSuccessMessage] = useState('nan')
+  const [successMessage, setSuccessMessage] = useState('')
 
   
 
@@ -70,29 +68,37 @@ const App = () => {
 
   const deletePersonId = (id) => {
     
+    
     console.log('Pressed the delete button of id:  ' + id)
-    const url = `http://localhost:3001/persons/${id}`
+    const url = `http://localhost:3001/api/persons/${id}`
     const person = persons.find(p => p.id === id)
 
     if(window.confirm("Do you want to delete ")) {
+      console.log(person.id)
+    
       axios.delete(url)
+
+ 
+      
+  
       .then(response => {
         console.log("Succesfully deleted!")
+      
         
-
         setSuccessMessage(
           person.name + ` was deleted!`
+          
         )
-        
+      
         setTimeout(() => {
           setSuccessMessage(null)
         }, 5000 )
         
+  
       })
-
     }
   }
-
+ 
 
 
   const findPersons = (newName) => {
@@ -126,13 +132,11 @@ const App = () => {
 
       setSuccessMessage(
         personObj.name + ` was added!`
+        
       )
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
-    
-    
-      
     })
   }}
 
