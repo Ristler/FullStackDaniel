@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
 import personService from './services/persons'
-
 
 const Notification = ({ message }) => {
   if (message) {
@@ -14,9 +12,7 @@ const Notification = ({ message }) => {
   )
 }}
 
-
 const PersonForm = (props) => {
-
 return (
   <form onSubmit={props.addPerson}>
 
@@ -53,11 +49,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
-  
-
-
   useEffect(() => {
-  
     personService
       .getAll()
       .then(response => {
@@ -68,38 +60,27 @@ const App = () => {
 
   const deletePersonId = (id) => {
     
-    
     console.log('Pressed the delete button of id:  ' + id)
-    const url = `http://localhost:3001/api/persons/${id}`
     const person = persons.find(p => p.id === id)
 
     if(window.confirm("Do you want to delete ")) {
       console.log(person.id)
     
-      axios.delete(url)
-
- 
+      personService
+      .del(id)
       
-  
-      .then(response => {
-        console.log("Succesfully deleted!")
-      
-        
-        setSuccessMessage(
-          person.name + ` was deleted!`
-          
-        )
-      
+      .then(response => {        
+        setSuccessMessage(person.name + ` was deleted!`)
         setTimeout(() => {
+          window.location.reload(false);
           setSuccessMessage(null)
         }, 5000 )
         
-  
+        
       })
     }
+    
   }
- 
-
 
   const findPersons = (newName) => {
     if(persons.map(x => x.name).includes(newName)) {
@@ -111,11 +92,9 @@ const App = () => {
     return false;
   }
 
-
   const addPerson = (event) => {
     event.preventDefault();
 
-    //EHKÄ TÄSSÄ
      if(findPersons(newName) === false ) {
     
     const personObj = {
@@ -140,10 +119,6 @@ const App = () => {
     })
   }}
 
-
-
-
-  //HANDLERS
   const handlePersonChange = (event) => {
     setNewName(event.target.value)
   }
@@ -151,13 +126,12 @@ const App = () => {
     setNewNumber(event.target.value)
     
   }
+
   return (
     <div>
       <h2>Phonebook</h2>
-  
       <Notification message={successMessage} />
     <div>
-
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber}
       handlePersonChange={handlePersonChange} handleNumberChange={handleNumberChange} />
       <h2>Names & Numbers</h2>
@@ -167,5 +141,4 @@ const App = () => {
     </div>
   )
 }
-
 export default App
