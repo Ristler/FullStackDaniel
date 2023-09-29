@@ -30,8 +30,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
     response.status(404).end()
   }
 })
-  
-//FIXAA TÄMÄ, ETTÄ APP EI CRASH JOS KENTÄT ON TYHJÄT.
+
 blogsRouter.post('/', async (request, response) => {
  
 
@@ -59,16 +58,18 @@ blogsRouter.post('/', async (request, response) => {
 
   response.status(201).json(savedBlog)
 }catch (err) {
-  console.log("error.")
+  console.log("Catched the error!")
   response.status(400)
 }})
 
-//TOIMII.
+
 blogsRouter.delete('/:id', async (request, response) => {
  await  Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
 })
 
+
+//TÄNNE TULEE EHKÄ SE LIKEN TOIMINALLISUUS.. PÄHKÄILE.
 blogsRouter.put('/:id', (request, response, next) => {
   const body = request.body
 
@@ -76,7 +77,10 @@ blogsRouter.put('/:id', (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
+    likes: 0,
+
   }
+
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     .then(updatedBlog => {
       response.json(updatedBlog)

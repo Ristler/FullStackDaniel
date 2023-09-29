@@ -5,6 +5,8 @@ const userSchema = mongoose.Schema({
   username: String,
   name: String,
   passwordHash: String,
+  //MUOKATTU POISTA JOS FUCKED
+  id: Number,
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
